@@ -51,20 +51,27 @@ public class JSONTranslator implements Translator {
 
                 List<String> languages = new ArrayList<>();
 
-                if (!countryCodes.contains(countryCode)) {
-                    countryCodes.add(countryCode);
-                }
+                // Task C: record this countryCode in the correct instance variable
+                countryCodes.add(countryCode.toLowerCase());
 
                 // iterate through the other keys to get the information that we need
                 for (String key : countryData.keySet()) {
                     if (!key.equals("id") && !key.equals("alpha2") && !key.equals("alpha3")) {
                         String languageCode = key;
-                        String translatedName = countryData.getString(languageCode);
-                        translations.put(countryCode + "-" + languageCode, translatedName);
+                        // Task C: record this translation in the appropriate instance variable
+                        String translation = countryData.getString(key);
+                        String translationKey = countryCode.toLowerCase() + "-" + languageCode;
+                        translations.put(translationKey, translation);
 
                         if (!languages.contains(languageCode)) {
                             languages.add(languageCode);
                         }
+                    }
+                }
+
+                for (String langCode : languages) {
+                    if (!languageCodes.contains(langCode)) {
+                        languageCodes.add(langCode);
                     }
                 }
             }
@@ -76,6 +83,7 @@ public class JSONTranslator implements Translator {
 
     @Override
     public List<String> getLanguageCodes() {
+        // Task C: return a copy of the language codes
         return new ArrayList<>(languageCodes);
     }
 
@@ -86,6 +94,8 @@ public class JSONTranslator implements Translator {
 
     @Override
     public String translate(String countryCode, String languageCode) {
-        return translations.getOrDefault(countryCode+ "-"+languageCode, null);
+        // Task C: complete this method using your instance variables as needed
+        String key = countryCode.toLowerCase() + "-" + languageCode;
+        return translations.get(key);
     }
 }
